@@ -28,7 +28,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::prefix('categories')->group(function () {
         Route::get('/', [CategoriesController::class, 'index'])->name('admin.categories.index');
         Route::post('/', [CategoriesController::class, 'store'])->name('admin.categories.store');
-        // Route::put('/{id}', [CategoriesController::class, 'update'])->name('admin.categories.update');
-        // Route::delete('/{id}', [CategoriesController::class, 'destroy'])->name('admin.categories.destroy');
+        Route::put('/{id}', [CategoriesController::class, 'update'])->name('admin.categories.update');
+        Route::delete('/{id}', [CategoriesController::class, 'destroy'])->name('admin.categories.destroy');
     });
 });
