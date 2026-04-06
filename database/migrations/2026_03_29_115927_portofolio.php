@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('tech_stacks_id')->constrained('tech-stacks');
             $table->string('title');
             $table->text('description');
-            $table->timestamp('date');
+            $table->timestamps();
         });
     }
 

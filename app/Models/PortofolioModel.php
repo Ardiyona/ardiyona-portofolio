@@ -14,7 +14,6 @@ class PortofolioModel extends Model
         'tech_stacks_id',
         'title',
         'description',
-        'date'
     ];
 
     public function category()

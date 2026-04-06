@@ -32,7 +32,14 @@
                 <li class="sidebar-item {{ request()->is('admin/users*') ? 'active' : '' }}">
                     <a href="{{ url('/admin/users') }}" class='sidebar-link'>
                         <i class="bi bi-person-fill"></i>
-                        <span>Users</span>
+                        <span>Pengguna</span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item {{ request()->is('admin/categories*') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/categories') }}" class='sidebar-link'>
+                        <i class="bi bi-book-fill"></i>
+                        <span>Kategori</span>
                     </a>
                 </li>
                 
