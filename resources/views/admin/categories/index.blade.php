@@ -47,87 +47,22 @@
                                 <td>{{ $category->name }}</td>
                                 <td>
                                     <!-- Button trigger Edit Modal -->
-                                    <button class="btn btn-sm btn-info text-white" data-bs-toggle="modal"
-                                        data-bs-target="#editModal{{ $category->id }}">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </button>
-                                    <!-- Button trigger Delete Modal -->
-                                    <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
-                                        data-bs-target="#deleteModal{{ $category->id }}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
+                                        <button type="button" class="btn btn-info text-white btn-sm edit-btn"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editModal"
+                                            data-id="{{ $category->id }}">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </button>
+                                        <!-- Delete Button -->
+                                        <button type="button" class="btn btn-danger btn-sm delete-btn"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal"
+                                            data-id="{{ $category->id }}"
+                                            data-name="{{ $category->name }}">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
                                 </td>
                             </tr>
-
-                            <!-- Edit Modal -->
-                            <div class="modal fade text-left" id="editModal{{ $category->id }}" tabindex="-1" role="dialog"
-                                aria-labelledby="editModalLabel{{ $category->id }}" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="editModalLabel{{ $category->id }}">Edit Kategori</h4>
-                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                                <i data-feather="x"></i>
-                                            </button>
-                                        </div>
-                                        <form class="editCategoryForm"
-                                            action="{{ route('admin.categories.update', $category->id) }}" method="POST">
-                                            @csrf
-                                            @method('PUT')
-                                            <div class="modal-body">
-                                                <div class="alert alert-danger d-none edit-form-alert"></div>
-                                                <label>Kode: </label>
-                                                <div class="form-group">
-                                                    <input type="code" name="code" value="{{ old('code', $category->code) }}"
-                                                        class="form-control">
-                                                    <span class="text-danger small error-code"></span>
-                                                </div>
-                                                <label>Nama: </label>
-                                                <div class="form-group">
-                                                    <input type="text" name="name" value="{{ old('name', $category->name) }}"
-                                                        class="form-control">
-                                                    <span class="text-danger small error-name"></span>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-light-secondary"
-                                                    data-bs-dismiss="modal">Tutup</button>
-                                                <button type="submit" class="btn btn-primary ms-1 edit-submit-btn">Simpan
-                                                    Perubahan</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Delete Modal -->
-                            <div class="modal fade text-left" id="deleteModal{{ $category->id }}" tabindex="-1" role="dialog"
-                                aria-labelledby="deleteModalLabel{{ $category->id }}" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="deleteModalLabel{{ $category->id }}">Konfirmasi Hapus
-                                            </h4>
-                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                                                <i data-feather="x"></i>
-                                            </button>
-                                        </div>
-                                        <form action="{{ route('admin.categories.destroy', $category->id) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <div class="modal-body">
-                                                <p>Apakah Anda yakin ingin menghapus kategori <strong>{{ $category->name
-                                                                        }}</strong>?</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-light-secondary"
-                                                    data-bs-dismiss="modal">Batal</button>
-                                                <button type="submit" class="btn btn-danger ms-1">Hapus Kategori</button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
 
                         @empty
                             <tr>
@@ -140,42 +75,13 @@
         </div>
     </section>
 
-    <!-- Create Modal -->
-    <div class="modal fade text-left" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="createModalLabel">Tambah Kategori Baru</h4>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                        <i data-feather="x"></i>
-                    </button>
-                </div>
-                <form id="createCategoryForm" action="{{ route('admin.categories.store') }}" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="alert alert-danger d-none" id="createFormAlert"></div>
-                        <label>Kode: </label>
-                        <div class="form-group">
-                            <input type="text" name="code" placeholder="Kode" class="form-control">
-                            <span class="text-danger small" id="error-code"></span>
-                        </div>
-                        <label>Nama: </label>
-                        <div class="form-group">
-                            <input type="text" name="name" placeholder="Nama Lengkap" class="form-control">
-                            <span class="text-danger small" id="error-name"></span>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">Tutup</button>
-                        <button type="submit" class="btn btn-primary ms-1" id="createSubmitBtn">Simpan Kategori</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    @include('admin.categories.create')
+    @include('admin.categories.update')
+    @include('admin.categories.delete')
 
 @endsection
+
+
 
 @push('scripts')
     <script>
@@ -267,17 +173,66 @@
                 createForm.reset();
             });
 
-            // ===== Edit Modals =====
-            document.querySelectorAll('.editCategoryForm').forEach(function (editForm) {
-                handleAjaxSubmit(editForm, '.edit-submit-btn', '.edit-form-alert', 'Simpan Perubahan');
+            // ===== Dynamic Modals (Edit & Delete) =====
+            
+            // Handle Delete Modal Binding
+            document.querySelectorAll('.delete-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const name = this.getAttribute('data-name');
+                    
+                    document.getElementById('deleteCategoryName').textContent = name;
+                    document.getElementById('deleteCategoryForm').action = `/admin/categories/${id}`;
+                });
+            });
+            
+            // Handle Edit Modal Binding (AJAX Fetch)
+            const editForm = document.getElementById('editCategoryForm');
+            const editCodeInput = document.getElementById('editCategoryCode');
+            const editNameInput = document.getElementById('editCategoryName');
+            const editAlert = document.getElementById('editFormAlert');
+            const editSubmitBtn = document.getElementById('editSubmitBtn');
+            
+            handleAjaxSubmit(editForm, '#editSubmitBtn', '#editFormAlert', 'Simpan Perubahan');
 
-                const modal = editForm.closest('.modal');
-                if (modal) {
-                    modal.addEventListener('hidden.bs.modal', function () {
-                        const alertEl = modal.querySelector('.edit-form-alert');
-                        clearFormErrors(modal, alertEl);
+            document.querySelectorAll('.edit-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    
+                    // Reset form and errors
+                    clearFormErrors(editForm, editAlert);
+                    editForm.reset();
+                    editSubmitBtn.disabled = true;
+                    editSubmitBtn.textContent = 'Memuat...';
+                    
+                    // Fetch data
+                    fetch(`/admin/categories/${id}`, {
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        editCodeInput.value = data.code;
+                        editNameInput.value = data.name;
+                        editForm.action = `/admin/categories/${id}`;
+                        
+                        editSubmitBtn.disabled = false;
+                        editSubmitBtn.textContent = 'Simpan Perubahan';
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        editAlert.classList.remove('d-none');
+                        editAlert.textContent = 'Gagal memuat data kategori.';
+                        editSubmitBtn.disabled = false;
+                        editSubmitBtn.textContent = 'Simpan Perubahan';
                     });
-                }
+                });
+            });
+
+            document.getElementById('editModal').addEventListener('hidden.bs.modal', function () {
+                clearFormErrors(editForm, editAlert);
             });
 
         });

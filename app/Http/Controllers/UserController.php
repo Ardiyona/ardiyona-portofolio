@@ -29,6 +29,12 @@ class UserController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        $user = UserModel::findOrFail($id);
+        return response()->json($user);
+    }
+
     public function update(UserUpdateRequest $request, $id)
     {
         $user = UserModel::findOrFail($id);

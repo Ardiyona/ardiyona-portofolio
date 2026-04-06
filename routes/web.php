@@ -20,6 +20,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('admin.users.index');
+        Route::get('/{id}', [UserController::class, 'show'])->name('admin.users.show');
         Route::post('/', [UserController::class, 'store'])->name('admin.users.store');
         Route::put('/{id}', [UserController::class, 'update'])->name('admin.users.update');
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
@@ -27,6 +28,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::prefix('categories')->group(function () {
         Route::get('/', [CategoriesController::class, 'index'])->name('admin.categories.index');
+        Route::get('/{id}', [CategoriesController::class, 'show'])->name('admin.categories.show');
         Route::post('/', [CategoriesController::class, 'store'])->name('admin.categories.store');
         Route::put('/{id}', [CategoriesController::class, 'update'])->name('admin.categories.update');
         Route::delete('/{id}', [CategoriesController::class, 'destroy'])->name('admin.categories.destroy');

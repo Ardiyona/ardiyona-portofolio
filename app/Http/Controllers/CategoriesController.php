@@ -36,11 +36,15 @@ class CategoriesController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        $category = CategoriesModel::findOrFail($id);
+        return response()->json($category);
+    }
+
     public function update(CategoryUpdateRequest $request, $id)
     {
         $result = $this->categoriesService->updateCategory($id, $request->all());
-
-        dd($result);
 
         if ($request->ajax() || $request->wantsJson()) {
             if ($result['status']) {
