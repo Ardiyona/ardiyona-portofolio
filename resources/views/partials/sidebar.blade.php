@@ -42,6 +42,13 @@
                         <span>Kategori</span>
                     </a>
                 </li>
+
+                <li class="sidebar-item {{ request()->is('admin/tech-stacks*') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/tech-stacks') }}" class='sidebar-link'>
+                        <i class="bi bi-terminal-fill"></i>
+                        <span>Tech Stack</span>
+                    </a>
+                </li>
                 
                 <li class="sidebar-item">
                     <form action="{{ route('logout') }}" method="POST" id="logout-form" style="display: none;">

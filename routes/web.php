@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\TechStacksController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,5 +33,13 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::post('/', [CategoriesController::class, 'store'])->name('admin.categories.store');
         Route::put('/{id}', [CategoriesController::class, 'update'])->name('admin.categories.update');
         Route::delete('/{id}', [CategoriesController::class, 'destroy'])->name('admin.categories.destroy');
+    });
+
+    Route::prefix('tech-stacks')->group(function () {
+        Route::get('/', [TechStacksController::class, 'index'])->name('admin.tech-stacks.index');
+        Route::get('/{id}', [TechStacksController::class, 'show'])->name('admin.tech-stacks.show');
+        Route::post('/', [TechStacksController::class, 'store'])->name('admin.tech-stacks.store');
+        Route::put('/{id}', [TechStacksController::class, 'update'])->name('admin.tech-stacks.update');
+        Route::delete('/{id}', [TechStacksController::class, 'destroy'])->name('admin.tech-stacks.destroy');
     });
 });

@@ -22,7 +22,7 @@ class CategoryUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $categoryId = $this->route('categories') ? $this->route('categories')->id : 0;
+        $categoryId = $this->route('id');
 
         return [
             'name' => 'required|string|max:255',

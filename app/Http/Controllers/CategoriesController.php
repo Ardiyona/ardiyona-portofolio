@@ -25,15 +25,13 @@ class CategoriesController extends Controller
 
     public function store(CategoryStoreRequest $request)
     {
-        $result = $this->categoriesService->createCategory($request->all());
+        $result = $this->categoriesService->createCategory($request->validated());
 
-        if ($request->ajax() || $request->wantsJson()) {
-            if ($result['status']) {
-                session()->flash('success', 'Kategori berhasil dibuat');
-                return response()->json(['success' => true, 'message' => 'Kategori berhasil dibuat']);
-            }
-            return response()->json(['message' => $result['message'] ?? 'Gagal membuat kategori'], 500);
+        if ($result['status']) {
+            session()->flash('success', 'Kategori berhasil dibuat');
+            return response()->json(['success' => true, 'message' => 'Kategori berhasil dibuat']);
         }
+        return response()->json(['message' => $result['message'] ?? 'Gagal membuat kategori'], 500);
     }
 
     public function show($id)
@@ -44,15 +42,14 @@ class CategoriesController extends Controller
 
     public function update(CategoryUpdateRequest $request, $id)
     {
-        $result = $this->categoriesService->updateCategory($id, $request->all());
+        $result = $this->categoriesService->updateCategory($id, $request->validated());
 
-        if ($request->ajax() || $request->wantsJson()) {
-            if ($result['status']) {
-                session()->flash('success', 'Kategori berhasil diupdate');
-                return response()->json(['success' => true, 'message' => 'Kategori berhasil diupdate']);
-            }
-            return response()->json(['message' => $result['message'] ?? 'Gagal mengupdate kategori'], 500);
+        if ($result['status']) {
+            session()->flash('success', 'Kategori berhasil diupdate');
+            return response()->json(['success' => true, 'message' => 'Kategori berhasil diupdate']);
         }
+        return response()->json(['message' => $result['message'] ?? 'Gagal mengupdate kategori'], 500);
+
     }
 
     public function destroy($id)

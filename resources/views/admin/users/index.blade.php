@@ -94,7 +94,7 @@
 
         function showValidationErrors(form, alertEl, errors) {
             for (const field in errors) {
-                const errorSpan = form.querySelector('#error-' + field) || form.querySelector('.error-' + field);
+                const errorSpan = form.querySelector('#error-' + field) || form.querySelector('#error-edit-' + field);
                 const input = form.querySelector('[name="' + field + '"]');
                 if (errorSpan) {
                     errorSpan.textContent = errors[field][0];
