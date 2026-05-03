@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tech-stacks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('techStack_code');
+            $table->string('code');
             $table->timestamps();
         });
     }

@@ -11,6 +11,6 @@ class TechStacksModel extends Model
     protected $fillable = [
         'id',
         'name',
-        'techStack_code'
+        'code'
     ];
 }
