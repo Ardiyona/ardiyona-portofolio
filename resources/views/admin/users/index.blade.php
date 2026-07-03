@@ -60,8 +60,9 @@
 
         // ===== DataTable Init =====
         const table = $('#usersTable').DataTable({
+            serverSide:true,
             ajax: {
-                url: '{{ route("admin.users.index") }}',
+                url: '{{ route("admin.users.list") }}',
                 dataSrc: 'data'
             },
             columns: [

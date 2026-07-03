@@ -59,8 +59,9 @@
 
             // ===== DataTable Init =====
             const table = $('#categoriesTable').DataTable({
+                serverSide: true,
                 ajax: {
-                    url: '{{ route("admin.categories.index") }}',
+                    url: '{{ route("admin.categories.list") }}',
                     dataSrc: 'data'
                 },
                 columns: [

@@ -9,6 +9,7 @@ use App\Services\CategoriesService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Yajra\DataTables\DataTables;
 
 class CategoriesController extends Controller
 {
@@ -19,14 +20,14 @@ class CategoriesController extends Controller
         $this->categoriesService = $categoriesService;
     }
 
-    public function index(Request $request): View|JsonResponse
+    public function index(): View
     {
-        if ($request->wantsJson()) {
-            $categories = CategoriesModel::all(['id', 'code', 'name']);
-            return response()->json(['data' => $categories]);
-        }
-
         return view('admin.categories.index');
+    }
+
+    public function list(Request $request)
+    {
+        return DataTables::of(CategoriesModel::select('id','name','code'))->make();
     }
 
     public function store(CategoryStoreRequest $request): JsonResponse

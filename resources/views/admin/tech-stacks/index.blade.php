@@ -5,21 +5,6 @@
 
 @section('content')
     <section class="section">
-        <!-- Flash Messages -->
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
         <div class="card">
             <div class="card-header">
                 Daftar Tech Stack Sistem
@@ -28,7 +13,7 @@
                 </button>
             </div>
             <div class="card-body">
-                <table class="table table-striped" id="table1">
+                <table class="table table-striped" id="techStacksTable">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -37,37 +22,7 @@
                             <th>Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @forelse($techStacks as $techStack)
-                            <tr>
-                                <td>{{ $techStack->id }}</td>
-                                <td>{{ $techStack->code }}</td>
-                                <td>{{ $techStack->name }}</td>
-                                <td>
-                                    <!-- Button trigger Edit Modal -->
-                                        <button type="button" class="btn btn-info text-white btn-sm edit-btn"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#editModal"
-                                            data-id="{{ $techStack->id }}">
-                                            <i class="bi bi-pencil-square"></i>
-                                        </button>
-                                        <!-- Delete Button -->
-                                        <button type="button" class="btn btn-danger btn-sm delete-btn"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#deleteModal"
-                                            data-id="{{ $techStack->id }}"
-                                            data-name="{{ $techStack->name }}">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                </td>
-                            </tr>
-
-                        @empty
-                            <tr>
-                                <td colspan="4" class="text-center">Tidak ada data tech stack</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
@@ -82,6 +37,64 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+
+            // ===== Toast Notification =====
+            function showToast(message, type = 'success') {
+                Toastify({
+                    text: message,
+                    duration: 3000,
+                    close: true,
+                    gravity: 'top',
+                    position: 'right',
+                    style: {
+                        background: type === 'success'
+                            ? 'linear-gradient(to right, #00b09b, #96c93d)'
+                            : 'linear-gradient(to right, #ff5f6d, #ffc371)',
+                    }
+                }).showToast();
+            }
+
+            const table = $('#techStacksTable').DataTable({
+                serverSide: true,
+                ajax: {
+                    url: '{{ route('admin.tech-stacks.list') }}',
+                    dataSrc: 'data'
+                },
+                columns: [
+                    { data: 'id' },
+                    { data: 'code' },
+                    { data: 'name' },
+                    {
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        render: function (data) {
+                            return `
+                                <button type="button" class="btn btn-info text-white btn-sm edit-btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editModal"
+                                    data-id="${data.id}">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm delete-btn"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal"
+                                    data-id="${data.id}"
+                                    data-name="${data.name}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            `;
+                        }
+                    }
+                ],
+                language: {
+                    emptyTable: 'Tidak ada data kategori',
+                    search: 'Cari:',
+                    lengthMenu: 'Tampilkan _MENU_ data',
+                    info: 'Menampilkan _START_ - _END_ dari _TOTAL_ data',
+                    paginate: { previous: 'Sebelumnya', next: 'Selanjutnya' }
+                }
+            });
 
             // ===== Helper Functions =====
             function clearFormErrors(form, alertEl) {

@@ -7,6 +7,7 @@ use App\Http\Requests\TechStacksUpdateRequest;
 use App\Models\TechStacksModel;
 use App\Services\TechStacksService;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class TechStacksController extends Controller
 {
@@ -19,9 +20,12 @@ class TechStacksController extends Controller
 
     public function index()
     {
-        $techStacks = TechStacksModel::all();
+        return view('admin.tech-stacks.index');
+    }
 
-        return view('admin.tech-stacks.index', compact('techStacks'));
+    public function list()
+    {
+        return DataTables::of(TechStacksModel::select('id','name','code'))->make(true);
     }
 
     public function show($id)

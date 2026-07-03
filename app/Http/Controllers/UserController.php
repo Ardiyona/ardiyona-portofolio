@@ -8,18 +8,20 @@ use App\Models\UserModel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
-    public function index(Request $request): View|JsonResponse
+    public function index(): View
     {
-        if ($request->wantsJson()) {
-            $users = UserModel::all(['id', 'name', 'email']);
-            return response()->json(['data' => $users]);
-        }
-
         return view('admin.users.index');
+    }
+
+    public function list(): JsonResponse
+    {
+        return DataTables::of(UserModel::select('id','name','email'))->make(true);
     }
 
     public function store(UserStoreRequest $request): JsonResponse
