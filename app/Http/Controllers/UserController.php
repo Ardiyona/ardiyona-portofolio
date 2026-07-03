@@ -5,17 +5,24 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\UserModel;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request): View|JsonResponse
     {
-        $users = UserModel::all();
-        return view('admin.users.index', compact('users'));
+        if ($request->wantsJson()) {
+            $users = UserModel::all(['id', 'name', 'email']);
+            return response()->json(['data' => $users]);
+        }
+
+        return view('admin.users.index');
     }
 
-    public function store(UserStoreRequest $request)
+    public function store(UserStoreRequest $request): JsonResponse
     {
         UserModel::create([
             'name'     => $request->name,
@@ -23,19 +30,16 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        if ($request->ajax() || $request->wantsJson()) {
-            session()->flash('success', 'Pengguna berhasil ditambahkan.');
-            return response()->json(['success' => true, 'message' => 'Pengguna berhasil ditambahkan.']);
-        }
+        return response()->json(['success' => true, 'message' => 'Pengguna berhasil ditambahkan.']);
     }
 
-    public function show($id)
+    public function show($id): JsonResponse
     {
         $user = UserModel::findOrFail($id);
         return response()->json($user);
     }
 
-    public function update(UserUpdateRequest $request, $id)
+    public function update(UserUpdateRequest $request, $id): JsonResponse
     {
         $user = UserModel::findOrFail($id);
 
@@ -50,17 +54,14 @@ class UserController extends Controller
 
         $user->update($data);
 
-        if ($request->ajax() || $request->wantsJson()) {
-            session()->flash('success', 'Pengguna berhasil diperbarui.');
-            return response()->json(['success' => true, 'message' => 'Pengguna berhasil diperbarui.']);
-        }
+        return response()->json(['success' => true, 'message' => 'Pengguna berhasil diperbarui.']);
     }
 
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         $user = UserModel::findOrFail($id);
         $user->delete();
 
-        return redirect()->route('admin.users.index')->with('success', 'Pengguna berhasil dihapus.');
+        return response()->json(['success' => true, 'message' => 'Pengguna berhasil dihapus.']);
     }
 }

@@ -6,7 +6,9 @@ use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Models\CategoriesModel;
 use App\Services\CategoriesService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class CategoriesController extends Controller
 {
@@ -17,49 +19,52 @@ class CategoriesController extends Controller
         $this->categoriesService = $categoriesService;
     }
 
-    public function index()
+    public function index(Request $request): View|JsonResponse
     {
-        $categories = CategoriesModel::all();
-        return view('admin.categories.index', compact('categories'));
+        if ($request->wantsJson()) {
+            $categories = CategoriesModel::all(['id', 'code', 'name']);
+            return response()->json(['data' => $categories]);
+        }
+
+        return view('admin.categories.index');
     }
 
-    public function store(CategoryStoreRequest $request)
+    public function store(CategoryStoreRequest $request): JsonResponse
     {
         $result = $this->categoriesService->createCategory($request->validated());
 
         if ($result['status']) {
-            session()->flash('success', 'Kategori berhasil dibuat');
             return response()->json(['success' => true, 'message' => 'Kategori berhasil dibuat']);
         }
-        return response()->json(['message' => $result['message'] ?? 'Gagal membuat kategori'], 500);
+
+        return response()->json(['success' => false, 'message' => $result['message'] ?? 'Gagal membuat kategori'], 500);
     }
 
-    public function show($id)
+    public function show($id): JsonResponse
     {
         $category = CategoriesModel::findOrFail($id);
         return response()->json($category);
     }
 
-    public function update(CategoryUpdateRequest $request, $id)
+    public function update(CategoryUpdateRequest $request, $id): JsonResponse
     {
         $result = $this->categoriesService->updateCategory($id, $request->validated());
 
         if ($result['status']) {
-            session()->flash('success', 'Kategori berhasil diupdate');
             return response()->json(['success' => true, 'message' => 'Kategori berhasil diupdate']);
         }
-        return response()->json(['message' => $result['message'] ?? 'Gagal mengupdate kategori'], 500);
 
+        return response()->json(['success' => false, 'message' => $result['message'] ?? 'Gagal mengupdate kategori'], 500);
     }
 
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         $result = $this->categoriesService->deleteCategory($id);
 
         if ($result['status']) {
-            session()->flash('success', 'Kategori berhasil dihapus');
-            return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil dihapus.');
+            return response()->json(['success' => true, 'message' => 'Kategori berhasil dihapus']);
         }
-        return redirect()->route('admin.categories.index')->with('error', 'Kategori gagal dihapus.');
+
+        return response()->json(['success' => false, 'message' => $result['message'] ?? 'Gagal menghapus kategori'], 500);
     }
 }

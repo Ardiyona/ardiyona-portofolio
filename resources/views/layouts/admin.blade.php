@@ -11,6 +11,8 @@
     <link rel="stylesheet" crossorigin href="{{ asset('assets/mazer/compiled/css/app.css') }}">
     <link rel="stylesheet" crossorigin href="{{ asset('assets/mazer/compiled/css/app-dark.css') }}">
     <link rel="stylesheet" crossorigin href="{{ asset('assets/mazer/compiled/css/iconly.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/mazer/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/mazer/extensions/toastify-js/src/toastify.css') }}">
     @stack('styles')
 </head>
 
@@ -41,6 +43,10 @@
     <script src="{{ asset('assets/mazer/static/js/components/dark.js') }}"></script>
     <script src="{{ asset('assets/mazer/extensions/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/mazer/compiled/js/app.js') }}"></script>
+    <script src="{{ asset('assets/mazer/extensions/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/mazer/extensions/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/mazer/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('assets/mazer/extensions/toastify-js/src/toastify.js') }}"></script>
     @stack('scripts')
 </body>
 
