@@ -59,12 +59,9 @@ class TechStacksController extends Controller
 
     public function destroy($id)
     {
-        $result = $this->techStacksService->deleteTechStack($id);
+        $techStack = TechStacksModel::findOrFail($id);
+        $techStack->delete();
 
-        if ($result['status']) {
-            session()->flash('success', 'Tech Stack berhasil dihapus');
-            return redirect()->route('admin.tech-stacks.index')->with('success', 'Tech Stack berhasil dihapus.');
-        }
-        return redirect()->route('admin.tech-stacks.index')->with('error', 'Tech Stack gagal dihapus.');
+        return response()->json(['success' => true, 'message' => 'Tech Stack berhasil dihapus.']);
     }
 }

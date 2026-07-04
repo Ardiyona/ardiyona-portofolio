@@ -72,15 +72,12 @@
                             return `
                                 <button type="button" class="btn btn-info text-white btn-sm edit-btn"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#editModal"
-                                    data-id="${data.id}">
+                                    data-bs-target="#editModal">
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
                                 <button type="button" class="btn btn-danger btn-sm delete-btn"
                                     data-bs-toggle="modal"
-                                    data-bs-target="#deleteModal"
-                                    data-id="${data.id}"
-                                    data-name="${data.name}">
+                                    data-bs-target="#deleteModal">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             `;
@@ -184,13 +181,39 @@
             // ===== Dynamic Modals (Edit & Delete) =====
             
             // Handle Delete Modal Binding
-            document.querySelectorAll('.delete-btn').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    const name = this.getAttribute('data-name');
-                    
-                    document.getElementById('deleteTechStackName').textContent = name;
-                    document.getElementById('deleteTechStackForm').action = `/admin/tech-stacks/${id}`;
+            $('#techStacksTable').on('click', '.delete-btn', function () {
+                const rowData = table.row($(this).closest('tr')).data();
+
+                document.getElementById('deleteTechStackName').textContent = rowData.name;
+                document.getElementById('deleteTechStackForm').action = `/admin/tech-stacks/${rowData.id}`
+            });
+
+            const deleteForm = document.getElementById('deleteTechStackForm');
+            deleteForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                fetch(deleteForm.action, {
+                    method: 'POST',
+                    header: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                    },
+                    body: new FormData(deleteForm)
+                })
+                .then(async response => {
+                    const data = await response.json();
+                    console.log(data);
+                    if (!response.ok) throw { status: response.status, data: data };
+                    return data;
+                })
+                .then(data => {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+                    if (modal) modal.hide();
+                    table.ajax.reload(null, false);
+                    showToast(data.message);
+                })
+                .catch(err => {
+                    showToast(err.data?.message || 'Gagal menghapus tech stack', 'error');
                 });
             });
             
@@ -203,39 +226,37 @@
             
             handleAjaxSubmit(editForm, '#editSubmitBtn', '#editFormAlert', 'Simpan Perubahan');
 
-            document.querySelectorAll('.edit-btn').forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
+            $('#techStacksTable').on('click', '.edit-btn', function () {
+                const id = table.row($(this).closest('tr')).data().id;
+                
+                // Reset form and errors
+                clearFormErrors(editForm, editAlert);
+                editForm.reset();
+                editSubmitBtn.disabled = true;
+                editSubmitBtn.textContent = 'Memuat...';
+                
+                // Fetch data
+                fetch(`/admin/tech-stacks/${id}`, {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    editCodeInput.value = data.code;
+                    editNameInput.value = data.name;
+                    editForm.action = `/admin/tech-stacks/${id}`;
                     
-                    // Reset form and errors
-                    clearFormErrors(editForm, editAlert);
-                    editForm.reset();
-                    editSubmitBtn.disabled = true;
-                    editSubmitBtn.textContent = 'Memuat...';
-                    
-                    // Fetch data
-                    fetch(`/admin/tech-stacks/${id}`, {
-                        headers: {
-                            'Accept': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        editCodeInput.value = data.code;
-                        editNameInput.value = data.name;
-                        editForm.action = `/admin/tech-stacks/${id}`;
-                        
-                        editSubmitBtn.disabled = false;
-                        editSubmitBtn.textContent = 'Simpan Perubahan';
-                    })
-                    .catch(error => {
-                        console.error('Error fetching data:', error);
-                        editAlert.classList.remove('d-none');
-                        editAlert.textContent = 'Gagal memuat data tech stack.';
-                        editSubmitBtn.disabled = false;
-                        editSubmitBtn.textContent = 'Simpan Perubahan';
-                    });
+                    editSubmitBtn.disabled = false;
+                    editSubmitBtn.textContent = 'Simpan Perubahan';
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    editAlert.classList.remove('d-none');
+                    editAlert.textContent = 'Gagal memuat data tech stack.';
+                    editSubmitBtn.disabled = false;
+                    editSubmitBtn.textContent = 'Simpan Perubahan';
                 });
             });
 

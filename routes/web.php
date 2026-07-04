@@ -39,7 +39,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 
     Route::prefix('tech-stacks')->group(function () {
         Route::get('/', [TechStacksController::class, 'index'])->name('admin.tech-stacks.index');
-        Route::get('/list', [CategoriesController::class, 'list'])->name('admin.tech-stacks.list');
+        Route::get('/list', [TechStacksController::class, 'list'])->name('admin.tech-stacks.list');
         Route::get('/{id}', [TechStacksController::class, 'show'])->name('admin.tech-stacks.show');
         Route::post('/', [TechStacksController::class, 'store'])->name('admin.tech-stacks.store');
         Route::put('/{id}', [TechStacksController::class, 'update'])->name('admin.tech-stacks.update');

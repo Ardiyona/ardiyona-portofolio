@@ -81,19 +81,18 @@
                     data: null,
                     orderable: false,
                     searchable: false,
-                    render: function (data) {
+                    render: function () {
+                        // Tombol dibuat polos tanpa data user (id/name).
+                        // Data diambil dari row DataTables saat diklik -> aman dari XSS.
                         return `
                             <button type="button" class="btn btn-info text-white btn-sm edit-btn"
                                 data-bs-toggle="modal"
-                                data-bs-target="#editModal"
-                                data-id="${data.id}">
+                                data-bs-target="#editModal">
                                 <i class="bi bi-pencil-square"></i>
                             </button>
                             <button type="button" class="btn btn-danger btn-sm delete-btn"
                                 data-bs-toggle="modal"
-                                data-bs-target="#deleteModal"
-                                data-id="${data.id}"
-                                data-name="${data.name}">
+                                data-bs-target="#deleteModal">
                                 <i class="bi bi-trash"></i>
                             </button>
                         `;
@@ -201,11 +200,11 @@
 
         // ===== Delete Modal Binding (Event Delegation) =====
         $('#usersTable').on('click', '.delete-btn', function () {
-            const id = this.getAttribute('data-id');
-            const name = this.getAttribute('data-name');
+            // Ambil data baris dari DataTables, bukan dari atribut HTML.
+            const rowData = table.row($(this).closest('tr')).data();
 
-            document.getElementById('deleteUserName').textContent = name;
-            document.getElementById('deleteUserForm').action = `/admin/users/${id}`;
+            document.getElementById('deleteUserName').textContent = rowData.name;
+            document.getElementById('deleteUserForm').action = `/admin/users/${rowData.id}`;
         });
 
         // Handle Delete Submit via AJAX
@@ -247,7 +246,7 @@
         handleAjaxSubmit(editForm, '#editSubmitBtn', '#editFormAlert', 'Simpan Perubahan', 'editModal');
 
         $('#usersTable').on('click', '.edit-btn', function () {
-            const id = this.getAttribute('data-id');
+            const id = table.row($(this).closest('tr')).data().id;
 
             // Reset form and errors
             clearFormErrors(editForm, editAlert);
