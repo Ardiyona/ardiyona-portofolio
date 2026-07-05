@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\TechStacksStoreRequest;
 use App\Http\Requests\TechStacksUpdateRequest;
-use App\Models\TechStacksModel;
+use App\Models\TechStackModel;
 use App\Services\TechStackService;
 use Yajra\DataTables\DataTables;
 
-class TechStacksController extends Controller
+class TechStackController extends Controller
 {
     protected $techStackService;
 
@@ -24,12 +24,12 @@ class TechStacksController extends Controller
 
     public function list()
     {
-        return DataTables::of(TechStacksModel::select('id','name','code'))->make(true);
+        return DataTables::of(TechStackModel::select('id','name','code'))->make(true);
     }
 
     public function show($id)
     {
-        $techStack = TechStacksModel::findOrFail($id);
+        $techStack = TechStackModel::findOrFail($id);
 
         return response()->json($techStack);
     }
@@ -56,7 +56,7 @@ class TechStacksController extends Controller
 
     public function destroy($id)
     {
-        $techStack = TechStacksModel::findOrFail($id);
+        $techStack = TechStackModel::findOrFail($id);
         $techStack->delete();
 
         return response()->json(['success' => true, 'message' => 'Tech Stack berhasil dihapus.']);

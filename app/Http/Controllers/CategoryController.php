@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
-use App\Models\CategoriesModel;
+use App\Models\CategoryModel;
 use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Yajra\DataTables\DataTables;
 
-class CategoriesController extends Controller
+class CategoryController extends Controller
 {
     protected $categoryService;
 
@@ -27,7 +27,7 @@ class CategoriesController extends Controller
 
     public function list(Request $request)
     {
-        return DataTables::of(CategoriesModel::select('id','name','code'))->make();
+        return DataTables::of(CategoryModel::select('id','name','code'))->make();
     }
 
     public function store(CategoryStoreRequest $request): JsonResponse
@@ -43,7 +43,7 @@ class CategoriesController extends Controller
 
     public function show($id): JsonResponse
     {
-        $category = CategoriesModel::findOrFail($id);
+        $category = CategoryModel::findOrFail($id);
         return response()->json($category);
     }
 

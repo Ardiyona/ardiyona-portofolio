@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TechStacksModel extends Model
+class TechStackModel extends Model
 {
     protected $table = 'tech-stacks';
 

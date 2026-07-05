@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TechStacksController;
+use App\Http\Controllers\TechStackController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,20 +32,20 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     });
 
     Route::prefix('categories')->group(function () {
-        Route::get('/', [CategoriesController::class, 'index'])->name('admin.categories.index');
-        Route::get('/list', [CategoriesController::class, 'list'])->name('admin.categories.list');
-        Route::get('/{id}', [CategoriesController::class, 'show'])->name('admin.categories.show');
-        Route::post('/', [CategoriesController::class, 'store'])->name('admin.categories.store');
-        Route::put('/{id}', [CategoriesController::class, 'update'])->name('admin.categories.update');
-        Route::delete('/{id}', [CategoriesController::class, 'destroy'])->name('admin.categories.destroy');
+        Route::get('/', [CategoryController::class, 'index'])->name('admin.categories.index');
+        Route::get('/list', [CategoryController::class, 'list'])->name('admin.categories.list');
+        Route::get('/{id}', [CategoryController::class, 'show'])->name('admin.categories.show');
+        Route::post('/', [CategoryController::class, 'store'])->name('admin.categories.store');
+        Route::put('/{id}', [CategoryController::class, 'update'])->name('admin.categories.update');
+        Route::delete('/{id}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
     });
 
     Route::prefix('tech-stacks')->group(function () {
-        Route::get('/', [TechStacksController::class, 'index'])->name('admin.tech-stacks.index');
-        Route::get('/list', [TechStacksController::class, 'list'])->name('admin.tech-stacks.list');
-        Route::get('/{id}', [TechStacksController::class, 'show'])->name('admin.tech-stacks.show');
-        Route::post('/', [TechStacksController::class, 'store'])->name('admin.tech-stacks.store');
-        Route::put('/{id}', [TechStacksController::class, 'update'])->name('admin.tech-stacks.update');
-        Route::delete('/{id}', [TechStacksController::class, 'destroy'])->name('admin.tech-stacks.destroy');
+        Route::get('/', [TechStackController::class, 'index'])->name('admin.tech-stacks.index');
+        Route::get('/list', [TechStackController::class, 'list'])->name('admin.tech-stacks.list');
+        Route::get('/{id}', [TechStackController::class, 'show'])->name('admin.tech-stacks.show');
+        Route::post('/', [TechStackController::class, 'store'])->name('admin.tech-stacks.store');
+        Route::put('/{id}', [TechStackController::class, 'update'])->name('admin.tech-stacks.update');
+        Route::delete('/{id}', [TechStackController::class, 'destroy'])->name('admin.tech-stacks.destroy');
     });
 });

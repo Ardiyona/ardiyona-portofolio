@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\CategoriesModel;
+use App\Models\CategoryModel;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -14,7 +14,7 @@ class CategoryService
     {
         DB::beginTransaction();
         try {
-            $category = CategoriesModel::create($data);
+            $category = CategoryModel::create($data);
 
             DB::commit();
 
@@ -30,7 +30,7 @@ class CategoryService
     {
         DB::beginTransaction();
         try {
-            $category = CategoriesModel::findOrFail($id);
+            $category = CategoryModel::findOrFail($id);
             $category->update($data);
 
             DB::commit();
@@ -47,7 +47,7 @@ class CategoryService
     {
         DB::beginTransaction();
         try {
-            $category = CategoriesModel::findOrFail($id);
+            $category = CategoryModel::findOrFail($id);
             $category->delete();
 
             DB::commit();

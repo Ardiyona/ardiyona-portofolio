@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PortofolioModel extends Model
+class ProjectModel extends Model
 {
     protected $table = 'portofolio';
 
@@ -18,11 +18,11 @@ class PortofolioModel extends Model
 
     public function category()
     {
-        $this->belongsTo(CategoriesModel::class, 'category_id', 'id');
+        $this->belongsTo(CategoryModel::class, 'category_id', 'id');
     }
 
     public function tech_stack()
     {
-        $this->belongsTo(CategoriesModel::class, 'tech_stacks_id', 'id');
+        $this->belongsTo(TechStackModel::class, 'tech_stacks_id', 'id');
     }
 }

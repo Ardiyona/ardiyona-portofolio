@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\TechStacksModel;
+use App\Models\TechStackModel;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -15,7 +15,7 @@ class TechStackService
         try {
             DB::beginTransaction();
 
-            $techStack = TechStacksModel::create($data);
+            $techStack = TechStackModel::create($data);
 
             DB::commit();
 
@@ -32,7 +32,7 @@ class TechStackService
         try {
             DB::beginTransaction();
 
-            $techStack = TechStacksModel::findOrFail($id);
+            $techStack = TechStackModel::findOrFail($id);
             $techStack->update($data);
 
             DB::commit();
@@ -50,7 +50,7 @@ class TechStackService
         try {
             DB::beginTransaction();
 
-            $techStack = TechStacksModel::findOrFail($id);
+            $techStack = TechStackModel::findOrFail($id);
             $techStack->delete();
 
             DB::commit();
