@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoriesController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TechStacksController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/', function () {
         return view('admin.dashboard');
     });
+
+    Route::put('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
 
     Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('admin.users.index');
