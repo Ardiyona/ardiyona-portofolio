@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Models\CategoriesModel;
-use App\Services\CategoriesService;
+use App\Services\CategoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -13,11 +13,11 @@ use Yajra\DataTables\DataTables;
 
 class CategoriesController extends Controller
 {
-    protected $categoriesService;
+    protected $categoryService;
 
-    public function __construct(CategoriesService $categoriesService)
+    public function __construct(CategoryService $categoryService)
     {
-        $this->categoriesService = $categoriesService;
+        $this->categoryService = $categoryService;
     }
 
     public function index(): View
@@ -32,7 +32,7 @@ class CategoriesController extends Controller
 
     public function store(CategoryStoreRequest $request): JsonResponse
     {
-        $result = $this->categoriesService->createCategory($request->validated());
+        $result = $this->categoryService->createCategory($request->validated());
 
         if ($result['status']) {
             return response()->json(['success' => true, 'message' => 'Kategori berhasil dibuat']);
@@ -49,7 +49,7 @@ class CategoriesController extends Controller
 
     public function update(CategoryUpdateRequest $request, $id): JsonResponse
     {
-        $result = $this->categoriesService->updateCategory($id, $request->validated());
+        $result = $this->categoryService->updateCategory($id, $request->validated());
 
         if ($result['status']) {
             return response()->json(['success' => true, 'message' => 'Kategori berhasil diupdate']);
@@ -60,7 +60,7 @@ class CategoriesController extends Controller
 
     public function destroy($id): JsonResponse
     {
-        $result = $this->categoriesService->deleteCategory($id);
+        $result = $this->categoryService->deleteCategory($id);
 
         if ($result['status']) {
             return response()->json(['success' => true, 'message' => 'Kategori berhasil dihapus']);

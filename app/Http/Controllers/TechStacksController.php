@@ -5,17 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TechStacksStoreRequest;
 use App\Http\Requests\TechStacksUpdateRequest;
 use App\Models\TechStacksModel;
-use App\Services\TechStacksService;
-use Illuminate\Http\Request;
+use App\Services\TechStackService;
 use Yajra\DataTables\DataTables;
 
 class TechStacksController extends Controller
 {
-    protected $techStacksService;
+    protected $techStackService;
 
-    public function __construct(TechStacksService $techStacksService)
+    public function __construct(TechStackService $techStackService)
     {
-        $this->techStacksService = $techStacksService;
+        $this->techStackService = $techStackService;
     }
 
     public function index()
@@ -37,10 +36,9 @@ class TechStacksController extends Controller
 
     public function store(TechStacksStoreRequest $request)
     {
-        $result = $this->techStacksService->createTechStack($request->validated());
+        $result = $this->techStackService->createTechStack($request->validated());
 
         if ($result['status']) {
-            session()->flash('success', 'Tech Stack berhasil dibuat');
             return response()->json(['success' => true, 'message' => 'Tech Stack berhasil dibuat']);
         }
         return response()->json(['message' => $result['message'] ?? 'Gagal membuat tech stack'], 500);
@@ -48,10 +46,9 @@ class TechStacksController extends Controller
 
     public function update(TechStacksUpdateRequest $request, $id)
     {
-        $result = $this->techStacksService->updateTechStack($id, $request->validated());
+        $result = $this->techStackService->updateTechStack($id, $request->validated());
 
         if ($result['status']) {
-            session()->flash('success', 'Tech Stack berhasil diubah');
             return response()->json(['success' => true, 'message' => 'Tech Stack berhasil diubah']);
         }
         return response()->json(['message' => $result['message'] ?? 'Gagal mengubah tech stack'], 500);

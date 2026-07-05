@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 /**
  * Class CategoriesService.
  */
-class CategoriesService
+class CategoryService
 {
     public function createCategory($data)
     {

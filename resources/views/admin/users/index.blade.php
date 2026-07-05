@@ -166,6 +166,7 @@
                 .then(data => {
                     // Close modal, reload DataTable, show toast
                     const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+                    console.log(modal)
                     if (modal) modal.hide();
                     form.reset();
                     table.ajax.reload(null, false);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\UserModel;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -14,6 +15,13 @@ use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     public function index(): View
     {
         return view('admin.users.index');
@@ -26,13 +34,13 @@ class UserController extends Controller
 
     public function store(UserStoreRequest $request): JsonResponse
     {
-        UserModel::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $result = $this->userService->createUser($request->validated());
 
-        return response()->json(['success' => true, 'message' => 'Pengguna berhasil ditambahkan.']);
+        if ($result['status']) {
+            return response()->json(['success' => true, 'message' => 'Pengguna berhasil ditambahkan.']);
+        }
+
+        return response()->json(['success' => false, 'message' => $result['message'] ?? 'Gagal membuat pengguna'], 500);
     }
 
     public function show($id): JsonResponse
@@ -43,27 +51,30 @@ class UserController extends Controller
 
     public function update(UserUpdateRequest $request, $id): JsonResponse
     {
-        $user = UserModel::findOrFail($id);
-
-        $data = [
-            'name'  => $request->name,
-            'email' => $request->email,
-        ];
-
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
+        $data = $request->validated();
+        if (empty($data['password'])) {
+            unset($data['password']);
+        } else {
+            $data['password'] = Hash::make($data['password']);
         }
 
-        $user->update($data);
+        $result = $this->userService->updateUser($id, $data);
 
-        return response()->json(['success' => true, 'message' => 'Pengguna berhasil diperbarui.']);
+        if ($result['status']) {
+            return response()->json(['success' => true, 'message' => 'Pengguna berhasil diperbarui.']);
+        }
+
+        return response()->json(['success' => false, 'message' => $result['message'] ?? 'Gagal mengubah pengguna'], 500);
     }
 
     public function destroy($id): JsonResponse
     {
-        $user = UserModel::findOrFail($id);
-        $user->delete();
+        $result = $this->userService->deleteUser($id);
 
-        return response()->json(['success' => true, 'message' => 'Pengguna berhasil dihapus.']);
+        if ($result['status']) {
+            return response()->json(['success' => true, 'message' => 'Pengguna berhasil dihapus.']);
+        }
+
+        return response()->json(['success' => false, 'message' => $result['message'] || 'Gagal menghapus pengguna.'], 500);
     }
 }

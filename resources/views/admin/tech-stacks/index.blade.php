@@ -116,7 +116,7 @@
                 }
             }
 
-            function handleAjaxSubmit(form, submitBtnSelector, alertSelector, originalBtnText) {
+            function handleAjaxSubmit(form, submitBtnSelector, alertSelector, originalBtnText, modalId) {
                 form.addEventListener('submit', function (e) {
                     e.preventDefault();
 
@@ -149,7 +149,11 @@
                             return data;
                         })
                         .then(data => {
-                            window.location.reload();
+                            const modal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+                            if (modal) modal.hide();
+                            form.reset();
+                            table.ajax.reload(null, false);
+                            showToast(data.message);
                         })
                         .catch(err => {
                             if (submitBtn) {
@@ -169,7 +173,7 @@
 
             // ===== Create Modal =====
             const createForm = document.getElementById('createTechStackForm');
-            handleAjaxSubmit(createForm, '#createSubmitBtn', '#createFormAlert', 'Simpan Tech Stack');
+            handleAjaxSubmit(createForm, '#createSubmitBtn', '#createFormAlert', 'Simpan Tech Stack', 'createModal');
 
             document.getElementById('createModal').addEventListener('hidden.bs.modal', function () {
                 const modal = document.getElementById('createModal');
@@ -224,7 +228,7 @@
             const editAlert = document.getElementById('editFormAlert');
             const editSubmitBtn = document.getElementById('editSubmitBtn');
             
-            handleAjaxSubmit(editForm, '#editSubmitBtn', '#editFormAlert', 'Simpan Perubahan');
+            handleAjaxSubmit(editForm, '#editSubmitBtn', '#editFormAlert', 'Simpan Perubahan', 'editModal');
 
             $('#techStacksTable').on('click', '.edit-btn', function () {
                 const id = table.row($(this).closest('tr')).data().id;

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 /**
  * Class TechStacksService.
  */
-class TechStacksService
+class TechStackService
 {
     public function createTechStack($data)
     {
