@@ -34,6 +34,13 @@ class TechStackController extends Controller
         return response()->json($techStack);
     }
 
+    public function all()
+    {
+        $techStacks = TechStackModel::select('id', 'name')->get();
+
+        return response()->json($techStacks);
+    }
+
     public function store(TechStacksStoreRequest $request)
     {
         $result = $this->techStackService->createTechStack($request->validated());

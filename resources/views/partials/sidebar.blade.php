@@ -49,6 +49,13 @@
                         <span>Tech Stack</span>
                     </a>
                 </li>
+
+                <li class="sidebar-item {{ request()->is('admin/project*') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/project') }}" class='sidebar-link'>
+                        <i class="bi bi-folder-fill"></i>
+                        <span>Project</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

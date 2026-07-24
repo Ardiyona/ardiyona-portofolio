@@ -30,6 +30,13 @@ class CategoryController extends Controller
         return DataTables::of(CategoryModel::select('id','name','code'))->make();
     }
 
+    public function all()
+    {
+        $categories = CategoryModel::select('id', 'name')->get();
+
+        return response()->json($categories);
+    }
+
     public function store(CategoryStoreRequest $request): JsonResponse
     {
         $result = $this->categoryService->createCategory($request->validated());

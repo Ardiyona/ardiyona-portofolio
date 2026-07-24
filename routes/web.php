@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TechStackController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::prefix('categories')->group(function () {
         Route::get('/', [CategoryController::class, 'index'])->name('admin.categories.index');
         Route::get('/list', [CategoryController::class, 'list'])->name('admin.categories.list');
+        Route::get('/all', [CategoryController::class, 'all'])->name('admin.categories.all');
         Route::get('/{id}', [CategoryController::class, 'show'])->name('admin.categories.show');
         Route::post('/', [CategoryController::class, 'store'])->name('admin.categories.store');
         Route::put('/{id}', [CategoryController::class, 'update'])->name('admin.categories.update');
@@ -43,9 +45,19 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::prefix('tech-stacks')->group(function () {
         Route::get('/', [TechStackController::class, 'index'])->name('admin.tech-stacks.index');
         Route::get('/list', [TechStackController::class, 'list'])->name('admin.tech-stacks.list');
+        Route::get('/all', [TechStackController::class, 'all'])->name('admin.tech-stacks.all');
         Route::get('/{id}', [TechStackController::class, 'show'])->name('admin.tech-stacks.show');
         Route::post('/', [TechStackController::class, 'store'])->name('admin.tech-stacks.store');
         Route::put('/{id}', [TechStackController::class, 'update'])->name('admin.tech-stacks.update');
         Route::delete('/{id}', [TechStackController::class, 'destroy'])->name('admin.tech-stacks.destroy');
+    });
+
+    Route::prefix('project')->group(function () {
+        Route::get('/', [ProjectController::class, 'index'])->name('admin.project.index');
+        Route::get('/list', [ProjectController::class, 'list'])->name('admin.project.list');
+        Route::get('/{id}', [ProjectController::class, 'show'])->name('admin.project.show');
+        Route::post('/', [ProjectController::class, 'store'])->name('admin.project.store');
+        Route::put('/{id}', [ProjectController::class, 'update'])->name('admin.project.update');
+        Route::delete('/{id}', [ProjectController::class, 'destroy'])->name('admin.project.destroy');
     });
 });

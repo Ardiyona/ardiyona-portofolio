@@ -13,4 +13,9 @@ class TechStackModel extends Model
         'name',
         'code'
     ];
+
+    public function tech_stack_project()
+    {
+        return $this->belongsToMany(ProjectModel::class, 'tech-stack_project', 'tech_stack_id', 'project_id');
+    }
 }

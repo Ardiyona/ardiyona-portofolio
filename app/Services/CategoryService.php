@@ -12,8 +12,9 @@ class CategoryService
 {
     public function createCategory($data)
     {
-        DB::beginTransaction();
         try {
+            DB::beginTransaction();
+
             $category = CategoryModel::create($data);
 
             DB::commit();
@@ -28,8 +29,9 @@ class CategoryService
 
     public function updateCategory($id, $data)
     {
-        DB::beginTransaction();
         try {
+            DB::beginTransaction();
+        
             $category = CategoryModel::findOrFail($id);
             $category->update($data);
 
@@ -45,8 +47,9 @@ class CategoryService
 
     public function deleteCategory($id)
     {
-        DB::beginTransaction();
         try {
+            DB::beginTransaction();
+            
             $category = CategoryModel::findOrFail($id);
             $category->delete();
 
