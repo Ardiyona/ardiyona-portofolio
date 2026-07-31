@@ -56,6 +56,13 @@
                         <span>Project</span>
                     </a>
                 </li>
+
+                <li class="sidebar-item {{ request()->is('admin/experience*') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/experience') }}" class='sidebar-link'>
+                        <i class="bi bi-card-checklist"></i>
+                        <span>Experience</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

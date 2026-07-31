@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ExperienceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TechStackController;
@@ -59,5 +60,14 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
         Route::post('/', [ProjectController::class, 'store'])->name('admin.project.store');
         Route::put('/{id}', [ProjectController::class, 'update'])->name('admin.project.update');
         Route::delete('/{id}', [ProjectController::class, 'destroy'])->name('admin.project.destroy');
+    });
+
+    Route::prefix('experience')->group(function () {
+        Route::get('/', [ExperienceController::class, 'index'])->name('admin.experience.index');
+        Route::get('/list', [ExperienceController::class, 'list'])->name('admin.experience.list');
+        Route::get('/{id}', [ExperienceController::class, 'show'])->name('admin.experience.show');
+        Route::post('/', [ExperienceController::class, 'store'])->name('admin.experience.store');
+        Route::put('/{id}', [ExperienceController::class, 'update'])->name('admin.experience.update');
+        Route::delete('/{id}', [ExperienceController::class, 'destroy'])->name('admin.experience.destroy');
     });
 });
