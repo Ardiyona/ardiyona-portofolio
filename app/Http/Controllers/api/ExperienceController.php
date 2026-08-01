@@ -10,7 +10,7 @@ class ExperienceController extends Controller
 {
     public function getAll()
     {
-        $experiences = ExperienceModel::with('category', 'tech_stacks_project')->get();
+        $experiences = ExperienceModel::all();
 
         return response()->json([
             'status' => 'success',
