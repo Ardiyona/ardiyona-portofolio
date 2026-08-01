@@ -197,16 +197,17 @@
                     showToast(data.message);
                 })
                 .catch(err => {
-                    if (submitBtn) {
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = originalBtnText;
-                    }
-
                     if (err.status === 422 && err.data.errors) {
                         showValidationErrors(container, alertEl, err.data.errors);
                     } else if (alertEl) {
                         alertEl.classList.remove('d-none');
                         alertEl.textContent = err.data?.message || 'Terjadi kesalahan, silakan coba lagi.';
+                    }
+                })
+                .finally(() => {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnText;
                     }
                 });
             });
