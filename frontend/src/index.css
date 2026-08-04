@@ -99,6 +99,13 @@ html:not(.dark) .orb { opacity: 0.1; }
   left: 35%; bottom: 4%;
   background: var(--color-neon-3);
 }
+/* mobile: shrink + spread so the big blurred orbs don't clump */
+@media (max-width: 640px) {
+  .orb { filter: blur(80px); }
+  .orb-1 { width: 300px; height: 300px; left: -12%; top: 4%; }
+  .orb-2 { width: 260px; height: 260px; right: -14%; top: 34%; }
+  .orb-3 { width: 280px; height: 280px; left: 28%; bottom: 6%; }
+}
 
 /* ---- cursor-following glow ---- */
 .cursor-glow {
@@ -141,7 +148,12 @@ html:not(.dark) .cursor-glow {
   background: color-mix(in srgb, #05060a 78%, transparent);
 }
 html:not(.dark) .about-band {
-  background: color-mix(in srgb, #ffffff 82%, transparent);
+  background: color-mix(in srgb, #ffffff 55%, transparent);
+}
+
+/* tech-logo colour: neon on dark, dark ink on light (readable through veil) */
+html:not(.dark) .tech-ico {
+  color: #0f172a;
 }
 
 /* ---- glass card ---- */

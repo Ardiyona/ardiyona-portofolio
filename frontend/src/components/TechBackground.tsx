@@ -134,7 +134,7 @@ export default function TechBackground() {
                 return (
                   <span
                     key={si}
-                    className="absolute text-neon"
+                    className="tech-ico absolute text-neon"
                     style={{ top: `${s.top}%`, left: `${s.left}%`, opacity: L.opacity }}
                   >
                     <Icon size={L.size} />

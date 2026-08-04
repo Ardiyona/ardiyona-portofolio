@@ -36,7 +36,7 @@ export default function ExperienceSection() {
         <p className="text-current/60">Belum ada pengalaman.</p>
       )}
 
-      <div className="relative ml-3 border-l border-white/10 pl-8">
+      <div className="relative ml-3 border-l border-slate-900/15 pl-8 dark:border-white/10">
         {items.map((e, i) => {
           const current = !!e.is_currently_working;
           return (
@@ -45,7 +45,7 @@ export default function ExperienceSection() {
                 {/* node */}
                 <span
                   className={`absolute -left-[41px] top-1.5 grid h-4 w-4 place-items-center rounded-full ${
-                    current ? "bg-neon" : "bg-white/20"
+                    current ? "bg-neon" : "bg-slate-900/25 dark:bg-white/20"
                   }`}
                 >
                   {current && (
