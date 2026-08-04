@@ -141,6 +141,16 @@ html:not(.dark) .cursor-glow {
   100% { transform: translate3d(4%, -3%, 0) rotate(8deg) scale(1.15); }
 }
 
+/* ---- distinct section band (About) ----
+   translucent veil so the fixed tech-logo parallax field (z -2) + orbs read
+   through, while the band still feels darker/distinct than its neighbours. */
+.about-band {
+  background: color-mix(in srgb, #05060a 78%, transparent);
+}
+html:not(.dark) .about-band {
+  background: color-mix(in srgb, #ffffff 82%, transparent);
+}
+
 /* ---- glass card ---- */
 .glass {
   background: color-mix(in srgb, #0b0f1a 55%, transparent);
