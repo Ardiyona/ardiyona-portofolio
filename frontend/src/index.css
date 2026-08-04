@@ -83,28 +83,21 @@ html:not(.dark) .aurora::before {
   opacity: 0.16;
 }
 html:not(.dark) .orb { opacity: 0.1; }
+/* positions only; motion is a JS random-walk (see BackgroundOrbs.tsx) */
 .orb-1 {
   width: 560px; height: 560px;
   left: 4%; top: 8%;
   background: var(--color-neon);
-  animation: floaty 16s ease-in-out infinite;
 }
 .orb-2 {
   width: 480px; height: 480px;
   right: 4%; top: 38%;
   background: var(--color-neon-2);
-  animation: floaty 20s ease-in-out infinite reverse;
 }
 .orb-3 {
   width: 520px; height: 520px;
   left: 35%; bottom: 4%;
   background: var(--color-neon-3);
-  animation: floaty 24s ease-in-out infinite;
-}
-@keyframes floaty {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(3.5vw, -3vh) scale(1.06); }
-  66% { transform: translate(-3vw, 3vh) scale(0.97); }
 }
 
 /* ---- cursor-following glow ---- */

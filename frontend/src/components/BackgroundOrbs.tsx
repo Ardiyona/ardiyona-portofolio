@@ -1,13 +1,17 @@
 import { useEffect, useRef } from "react";
 
-// Background orbs that physically react when the cursor glow overlaps them:
-// within reach -> pushed away proportional to overlap; otherwise spring back to origin.
-// ponytail: simple distance-based repel + lerp return (no real engine); add velocity/inertia only if it feels too stiff.
+// Background orbs with a random-walk drift that also physically react when the
+// cursor glow overlaps them (pushed away proportional to overlap).
+// ponytail: constant-speed wander toward random targets + distance-based repel; no real engine.
 const CURSOR_R = 130; // cursor "touch" radius (px)
 const STRENGTH = 0.4; // push force per px of overlap
 const MAX_PUSH = 190; // cap displacement (px)
-const EASE = 0.12; // spring-ish return/approach factor
+const EASE = 0.12; // spring-ish push approach factor
 const CORE = 0.5; // orb blurred edge -> treat only inner half as solid
+const WANDER = 160; // random-walk range from home (px)
+const WSPEED = 0.35; // wander speed (px/frame) — small = slow drift
+
+const rnd = () => (Math.random() * 2 - 1) * WANDER;
 
 export default function BackgroundOrbs() {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -29,16 +33,30 @@ export default function BackgroundOrbs() {
     const els = Array.from(
       wrapRef.current?.querySelectorAll<HTMLElement>(".orb") ?? []
     );
-    const cur = els.map(() => ({ x: 0, y: 0 })); // current applied offset
+    const wander = els.map(() => ({ x: rnd(), y: rnd() })); // current drift offset
+    const target = els.map(() => ({ x: rnd(), y: rnd() })); // random-walk target
+    const push = els.map(() => ({ x: 0, y: 0 })); // eased cursor repel offset
 
     let raf = 0;
     const tick = () => {
       const c = cursor.current;
       els.forEach((el, i) => {
+        // random-walk: step toward target at constant speed, repick on arrival
+        const wx = target[i].x - wander[i].x;
+        const wy = target[i].y - wander[i].y;
+        const wd = Math.hypot(wx, wy) || 0.0001;
+        if (wd < 4) {
+          target[i] = { x: rnd(), y: rnd() };
+        } else {
+          wander[i].x += (wx / wd) * WSPEED;
+          wander[i].y += (wy / wd) * WSPEED;
+        }
+
         const r = el.getBoundingClientRect();
-        // base center = rendered center minus our own offset (decouples feedback)
-        const bx = r.left + r.width / 2 - cur[i].x;
-        const by = r.top + r.height / 2 - cur[i].y;
+        // base center = rendered center minus our whole applied offset
+        const off = { x: wander[i].x + push[i].x, y: wander[i].y + push[i].y };
+        const bx = r.left + r.width / 2 - off.x;
+        const by = r.top + r.height / 2 - off.y;
         const dx = bx - c.x;
         const dy = by - c.y;
         const dist = Math.hypot(dx, dy) || 0.0001;
@@ -47,13 +65,16 @@ export default function BackgroundOrbs() {
         let tx = 0;
         let ty = 0;
         if (dist < reach) {
-          const push = Math.min((reach - dist) * STRENGTH, MAX_PUSH);
-          tx = (dx / dist) * push;
-          ty = (dy / dist) * push;
+          const p = Math.min((reach - dist) * STRENGTH, MAX_PUSH);
+          tx = (dx / dist) * p;
+          ty = (dy / dist) * p;
         }
-        cur[i].x += (tx - cur[i].x) * EASE;
-        cur[i].y += (ty - cur[i].y) * EASE;
-        el.style.translate = `${cur[i].x.toFixed(1)}px ${cur[i].y.toFixed(1)}px`;
+        push[i].x += (tx - push[i].x) * EASE;
+        push[i].y += (ty - push[i].y) * EASE;
+
+        el.style.translate = `${(wander[i].x + push[i].x).toFixed(1)}px ${(
+          wander[i].y + push[i].y
+        ).toFixed(1)}px`;
       });
       raf = requestAnimationFrame(tick);
     };
