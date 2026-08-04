@@ -17,7 +17,7 @@ export default function Projects() {
   const projects: Project[] = data?.data ?? [];
 
   return (
-    <section id="projects" className="mx-auto max-w-5xl scroll-mt-24 px-5 py-24">
+    <section id="projects" className="mx-auto max-w-5xl scroll-mt-24 px-5 py-16">
       <Reveal>
         <h2 className="mb-2 font-mono text-sm text-neon">// projects</h2>
         <h3 className="mb-8 text-3xl font-bold sm:text-4xl">Proyek</h3>

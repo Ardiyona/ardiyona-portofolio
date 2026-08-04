@@ -13,7 +13,7 @@ export default function About() {
   const [imgOk, setImgOk] = useState(true);
 
   return (
-    <section id="about" className="mx-auto max-w-5xl scroll-mt-24 px-5 py-24">
+    <section id="about" className="mx-auto max-w-5xl scroll-mt-24 px-5 pt-4 pb-16">
       <Reveal>
         <h2 className="mb-2 font-mono text-sm text-neon">// about</h2>
         <h3 className="mb-8 text-3xl font-bold sm:text-4xl">Tentang Saya</h3>

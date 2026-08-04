@@ -22,7 +22,7 @@ export default function ExperienceSection() {
   const items: Experience[] = data?.data ?? [];
 
   return (
-    <section id="experience" className="mx-auto max-w-5xl scroll-mt-24 px-5 py-24">
+    <section id="experience" className="mx-auto max-w-5xl scroll-mt-24 px-5 py-16">
       <Reveal>
         <h2 className="mb-2 font-mono text-sm text-neon">// experience</h2>
         <h3 className="mb-8 text-3xl font-bold sm:text-4xl">Pengalaman</h3>

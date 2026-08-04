@@ -199,5 +199,6 @@ html:not(.dark) .glass {
   .orb,
   .gradient-text,
   .float { animation: none; }
+  .orb { translate: none; }
   .reveal { transition: none; opacity: 1; transform: none; }
 }

@@ -1,3 +1,4 @@
+import BackgroundOrbs from "./components/BackgroundOrbs";
 import CursorGlow from "./components/CursorGlow";
 import Navbar from "./components/Navbar";
 import Hero from "./sections/Hero";
@@ -10,9 +11,7 @@ export default function App() {
   return (
     <>
       <div className="aurora" aria-hidden="true">
-        <span className="orb orb-1" />
-        <span className="orb orb-2" />
-        <span className="orb orb-3" />
+        <BackgroundOrbs />
       </div>
       <CursorGlow />
       <Navbar />
