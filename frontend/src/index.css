@@ -82,7 +82,8 @@ html:not(.dark) .aurora::before {
   filter: blur(110px);
   opacity: 0.16;
 }
-html:not(.dark) .orb { opacity: 0.1; }
+/* light bg is low-contrast for the blurred neon → boost + tighten a touch */
+html:not(.dark) .orb { opacity: 0.22; filter: blur(95px); }
 /* positions only; motion is a JS random-walk (see BackgroundOrbs.tsx) */
 .orb-1 {
   width: 560px; height: 560px;

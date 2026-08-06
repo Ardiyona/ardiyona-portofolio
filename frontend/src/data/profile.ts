@@ -9,9 +9,8 @@ export const profile = {
   photo: "/profile.jpg",
   tagline: "Membangun aplikasi web yang efisien, stabil, dan scalable.",
   bio: [
-    "Full Stack Developer yang senang membangun aplikasi web dari awal sampai jadi — mulai dari sisi tampilan yang dipakai pengguna hingga sistem di baliknya. Saya fokus membuat produk yang cepat, stabil, dan nyaman digunakan.",
-    "Selama ini saya terlibat mengembangkan aplikasi nyata yang dipakai untuk mengelola pelanggan, penagihan, dan pembayaran, serta ikut merapikan dan menambah fitur pada sistem yang sudah berjalan. Selain web, saya juga pernah menggarap aplikasi mobile.",
-    "Saya terbiasa bekerja dalam tim, senang belajar hal baru, dan berusaha menyelesaikan masalah dengan cara yang sederhana namun tepat.",
+    "Full Stack Developer yang membangun aplikasi web dari tampilan sampai sistem di baliknya. Saya banyak mengerjakan produk yang benar-benar dipakai — dari aplikasi tagihan ISP dan pembayaran online hingga sistem pengelolaan anggaran.",
+    "Terbiasa membuat fitur baru sekaligus merapikan sistem yang sudah berjalan — dari REST API dan integrasi payment gateway sampai otomasi yang mengurangi pekerjaan manual. Saya suka menyelesaikan masalah dengan solusi yang sederhana dan tepat.",
   ],
 
   contacts: {
