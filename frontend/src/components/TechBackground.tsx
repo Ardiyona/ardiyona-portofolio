@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   SiReact,
   SiLaravel,
@@ -23,7 +23,7 @@ const ICONS = [
   SiGit,
 ];
 
-// scatter spots inside one tile (percent of the viewport-sized tile).
+// scatter spots inside one tile (percent of the tile = the section box).
 const SPOTS = [
   { top: 6, left: 8 },
   { top: 16, left: 72 },
@@ -56,15 +56,33 @@ const LAYERS = [
 export default function TechBackground() {
   const wrap = useRef<HTMLDivElement>(null);
 
+  // perf-lite (set by perfGuard on weak GPUs): keep the field but freeze it —
+  // render a single static layer and never start the animation loop.
+  const [lite, setLite] = useState(
+    () =>
+      typeof document !== "undefined" &&
+      document.documentElement.classList.contains("perf-lite")
+  );
   useEffect(() => {
+    const onLite = () => setLite(true);
+    window.addEventListener("perf-lite", onLite);
+    return () => window.removeEventListener("perf-lite", onLite);
+  }, []);
+
+  // fewer icons when we can't afford them: mobile GPU, or perf-lite → 1 layer.
+  const mobile =
+    typeof window !== "undefined" &&
+    window.matchMedia("(max-width: 640px)").matches;
+  const layers = mobile || lite ? LAYERS.slice(2) : LAYERS;
+
+  useEffect(() => {
+    if (lite) return; // static: no loop
     const el = wrap.current;
     if (!el) return;
-    const section = el.parentElement;
-    if (!section) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    const layers = Array.from(el.querySelectorAll<HTMLElement>("[data-layer]"));
-    const cfg = layers.map((l) => ({
+    const layerEls = Array.from(el.querySelectorAll<HTMLElement>("[data-layer]"));
+    const cfg = layerEls.map((l) => ({
       speed: Number(l.dataset.speed),
       ax: Number(l.dataset.ax),
       ay: Number(l.dataset.ay),
@@ -72,29 +90,17 @@ export default function TechBackground() {
 
     let raf = 0;
     const tick = () => {
-      const r = section.getBoundingClientRect();
-      const W = window.innerWidth || 1;
-      const H = window.innerHeight || 1;
-      // feather the field to the band's on-screen slice with a soft mask so
-      // logos fade in/out at the edges instead of being hard-cut.
-      const F = 90; // feather height (px)
-      const top = Math.max(0, r.top);
-      const bot = Math.min(H, r.bottom);
-      const mask =
-        `linear-gradient(to bottom,` +
-        ` transparent ${top}px,` +
-        ` #000 ${Math.min(top + F, bot)}px,` +
-        ` #000 ${Math.max(bot - F, top)}px,` +
-        ` transparent ${bot}px)`;
-      el.style.maskImage = mask;
-      el.style.setProperty("-webkit-mask-image", mask);
-
+      // tile size = the field's own box (== section). overflow-hidden on the
+      // section clips it, so no JS mask needed and no fixed-layer repaint quirks.
+      const r = el.getBoundingClientRect();
+      const W = r.width || 1;
+      const H = r.height || 1;
       const t = reduce ? 0 : performance.now();
       const sy = reduce ? 0 : window.scrollY;
-      layers.forEach((l, i) => {
+      layerEls.forEach((l, i) => {
         const c = cfg[i];
-        // modulo keeps offsets in [0,W)/[0,H); wrap point is visually identical
-        // (2x2 tiling) so the loop has no seam.
+        // modulo keeps offsets in [0,W)/[0,H); the 2x2 tiling makes the wrap
+        // point visually identical → seamless.
         const offX = (t * c.ax) % W;
         const offY = (sy * c.speed + t * c.ay) % H;
         l.style.transform = `translate(${offX.toFixed(1)}px, ${offY.toFixed(1)}px)`;
@@ -104,17 +110,17 @@ export default function TechBackground() {
     raf = requestAnimationFrame(tick);
 
     return () => cancelAnimationFrame(raf);
-  }, []);
+  }, [lite]);
 
   return (
     <div
       ref={wrap}
       aria-hidden="true"
-      // z -2 → behind aurora/orbs (z -1); the translucent band veil in front
-      // lets it read through while orbs float on top.
-      className="pointer-events-none fixed inset-0 z-[-2] overflow-hidden"
+      // absolute inside the (relative, overflow-hidden) About section → clipped
+      // to the band naturally. Sits above the band veil, below content (z-10).
+      className="pointer-events-none absolute inset-0 overflow-hidden"
     >
-      {LAYERS.map((L, li) => (
+      {layers.map((L, li) => (
         <div
           key={li}
           data-layer

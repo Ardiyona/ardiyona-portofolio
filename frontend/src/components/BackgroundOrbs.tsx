@@ -18,8 +18,13 @@ export default function BackgroundOrbs() {
   const cursor = useRef({ x: -9999, y: -9999 });
 
   useEffect(() => {
-    // honor reduced-motion: leave orbs static
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // leave orbs static on reduced-motion, on touch (no cursor to repel +
+    // mobile GPU can't spare a per-frame rAF loop), and once perf-lite kicks in
+    if (
+      window.matchMedia("(prefers-reduced-motion: reduce), (pointer: coarse)").matches ||
+      document.documentElement.classList.contains("perf-lite")
+    )
+      return;
 
     const move = (e: PointerEvent) => {
       cursor.current = { x: e.clientX, y: e.clientY };
@@ -38,6 +43,13 @@ export default function BackgroundOrbs() {
     const push = els.map(() => ({ x: 0, y: 0 })); // eased cursor repel offset
 
     let raf = 0;
+    // perfGuard flips to static mode mid-run → stop the loop, drop offsets
+    const onLite = () => {
+      cancelAnimationFrame(raf);
+      els.forEach((el) => (el.style.translate = ""));
+    };
+    window.addEventListener("perf-lite", onLite);
+
     const tick = () => {
       const c = cursor.current;
       els.forEach((el, i) => {
@@ -82,6 +94,7 @@ export default function BackgroundOrbs() {
 
     return () => {
       cancelAnimationFrame(raf);
+      window.removeEventListener("perf-lite", onLite);
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerout", leave);
     };

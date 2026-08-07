@@ -50,7 +50,7 @@ export default function ExperienceSection() {
           const current = !!e.is_currently_working;
           return (
             <Reveal key={e.id} delay={i * 80}>
-              <div className="relative pb-10 last:pb-0">
+              <div className="relative pb-14 last:pb-0">
                 {/* node */}
                 <span
                   className={`absolute -left-[41px] top-1.5 grid h-4 w-4 place-items-center rounded-full ${

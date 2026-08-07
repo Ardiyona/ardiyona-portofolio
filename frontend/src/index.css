@@ -106,6 +106,17 @@ html:not(.dark) .orb { opacity: 0.22; filter: blur(95px); }
   .orb-1 { width: 300px; height: 300px; left: -12%; top: 4%; }
   .orb-2 { width: 260px; height: 260px; right: -14%; top: 34%; }
   .orb-3 { width: 280px; height: 280px; left: 28%; bottom: 6%; }
+  /* backdrop-filter is the #1 mobile GPU cost (recomputed each frame anything
+     moves behind it). Drop it, bump card opacity so it still reads solid. */
+  .glass { backdrop-filter: none; background: color-mix(in srgb, #0b0f1a 82%, transparent); }
+  html:not(.dark) .glass { background: color-mix(in srgb, #ffffff 90%, transparent); }
+  /* aurora blur radius scaled down for small screens */
+  .aurora::before { filter: blur(50px); }
+}
+
+/* touch devices have no cursor — the follow-glow is pure wasted paint there */
+@media (pointer: coarse) {
+  .cursor-glow { display: none; }
 }
 
 /* ---- cursor-following glow ---- */
@@ -208,6 +219,30 @@ html:not(.dark) .glass {
   opacity: 1;
   transform: none;
 }
+
+/* ---- perf-lite: set by perfGuard.ts on GPUs that can't hold 45fps ----
+   device-agnostic (weak iGPU laptop or phone). Kills the paint-heavy effects
+   while keeping layout/colours identical, so it degrades gracefully. */
+html.perf-lite .glass {
+  backdrop-filter: none;
+  background: color-mix(in srgb, #0b0f1a 82%, transparent);
+}
+html.perf-lite:not(.dark) .glass {
+  background: color-mix(in srgb, #ffffff 90%, transparent);
+}
+html.perf-lite .cursor-glow { display: none; }
+/* everything in perf-lite is static (rAF loops + keyframes stopped), so a blur
+   here paints ONCE and is cached — the per-frame REPAINT was the real cost, not
+   the blur itself. Keep a real (smaller) blur so orbs stay soft like the full
+   version instead of turning into hard discs. */
+html.perf-lite .orb { filter: blur(70px); }
+html.perf-lite .aurora::before { filter: blur(50px); opacity: 0.45; }
+html.perf-lite:not(.dark) .aurora::before { opacity: 0.3; }
+/* stop every continuous animation — each frame repaints these big surfaces */
+html.perf-lite .aurora::before,
+html.perf-lite .aurora::after,
+html.perf-lite .gradient-text,
+html.perf-lite .float { animation: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .aurora::before,

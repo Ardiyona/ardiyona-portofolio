@@ -16,9 +16,12 @@ export default function About() {
   return (
     <section
       id="about"
-      className="about-band relative scroll-mt-24 overflow-hidden border-y border-white/10"
+      className="relative scroll-mt-24 overflow-hidden border-y border-white/10"
     >
       <TechBackground />
+      {/* veil ABOVE the tech field (not the section bg) so icons read *through*
+          it — soft/blurred look — while still sitting inside the clipped box */}
+      <div className="about-band pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="relative z-10 mx-auto max-w-5xl px-5 pt-16 pb-16">
       <Reveal>
         <h2 className="mb-2 font-mono text-sm text-neon">// about</h2>
