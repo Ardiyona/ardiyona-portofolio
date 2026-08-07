@@ -17,9 +17,18 @@ type Experience = {
 const fmt = (d: string | null) =>
   d ? new Date(d).toLocaleDateString("en-US", { month: "short", year: "numeric" }) : "";
 
+const ms = (d: string | null) => (d ? new Date(d).getTime() : 0);
+// ongoing (no end / flagged current) sorts as "ends in the far future" → floats to top
+const endMs = (e: Experience) =>
+  e.is_currently_working || !e.work_end ? Number.POSITIVE_INFINITY : ms(e.work_end);
+
+// newest first: by start date, tie-broken by end date (ongoing on top).
+const byRecency = (a: Experience, b: Experience) =>
+  ms(b.work_start) - ms(a.work_start) || endMs(b) - endMs(a);
+
 export default function ExperienceSection() {
   const { data, status, error } = useLandingPageExperiences();
-  const items: Experience[] = data?.data ?? [];
+  const items: Experience[] = [...(data?.data ?? [])].sort(byRecency);
 
   return (
     <section id="experience" className="mx-auto max-w-5xl scroll-mt-24 px-5 py-16">
