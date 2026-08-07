@@ -45,12 +45,12 @@ export default function ExperienceSection() {
         <p className="text-current/60">Belum ada pengalaman.</p>
       )}
 
-      <div className="relative ml-3 border-l border-slate-900/15 pl-8 dark:border-white/10">
+      <div className="relative ml-3 space-y-8 border-l border-slate-900/15 pl-8 dark:border-white/10">
         {items.map((e, i) => {
           const current = !!e.is_currently_working;
           return (
             <Reveal key={e.id} delay={i * 80}>
-              <div className="relative pb-14 last:pb-0">
+              <div className="relative">
                 {/* node */}
                 <span
                   className={`absolute -left-[41px] top-1.5 grid h-4 w-4 place-items-center rounded-full ${
