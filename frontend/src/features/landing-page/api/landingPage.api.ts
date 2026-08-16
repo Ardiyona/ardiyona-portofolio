@@ -9,4 +9,10 @@ export const landingPageApi = {
 
     getAllExperiences: async () =>
         (await axiosInstance.get('/experience')).data,
+
+    createViewLog: async () => {
+        const response = await axiosInstance.post('/views/log');
+        console.log(response);
+        return response.data;
+    }
 };

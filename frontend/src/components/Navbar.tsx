@@ -12,7 +12,7 @@ export default function Navbar() {
     <header className="fixed inset-x-0 top-0 z-50 border-b border-white/5">
       <nav className="glass mx-auto flex max-w-5xl items-center justify-between px-5 py-3">
         <a href="#top" className="font-mono text-sm font-bold tracking-tight">
-          {profile.name.split(" ")[0]}
+          {profile.name.split(" ")[2]}
           <span className="text-neon">.dev</span>
         </a>
 

@@ -6,8 +6,17 @@ import About from "./sections/About";
 import Projects from "./sections/Projects";
 import Experience from "./sections/Experience";
 import { profile } from "./data/profile";
+import { useEffect } from "react";
+import { useCreateViewLog } from "./features/landing-page/hooks/useLandingPageMutations";
 
 export default function App() {
+  
+  const { mutate: createViewLog} = useCreateViewLog();
+
+  useEffect(() => {
+    createViewLog();
+  }, [createViewLog]);
+
   return (
     <>
       <div className="aurora" aria-hidden="true">
