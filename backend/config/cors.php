@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://ardiyona.web.id', 'http://localhost:5173'],
+    'allowed_origins' => ['https://ardiyona.web.id', 'http://localhost:5173', 'https://www.ardiyona.web.id'],
 
     'allowed_origins_patterns' => [],
 
