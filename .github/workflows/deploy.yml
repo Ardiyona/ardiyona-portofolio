@@ -1,0 +1,48 @@
+name: CI/CD Auto Deploy Laravel & React (Build di VPS)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-to-vps:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Hubungi VPS via SSH & Jalankan Perintah Deploy
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_IP }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        port: 22
+        script: |
+          echo "🚀 Memulai proses deployment otomatis..."
+          
+          # 1. Masuk ke folder repository utama
+          cd /var/www/ardiyona-portofolio
+          
+          # 2. Tarik kode terbaru dari GitHub
+          git pull origin main
+          
+          # 3. PROSES FRONTEND (FE)
+          cd frontend
+          echo "📦 Menginstall dependencies frontend..."
+          npm install --production --no-audit --no-fund
+          
+          echo "🏗️ Memulai compile React statis (Dibatasi RAM 512MB)..."
+          # Perintah di bawah membatasi Node.js agar hanya boleh memakai RAM maksimal 512MB
+          # Sisa beban lainnya akan ditampung dengan aman oleh SWAP 2GB Anda
+          NODE_OPTIONS="--max-old-space-size=512" npm run build
+          
+          # 4. PROSES BACKEND (BE)
+          cd ../backend
+          echo "⚙️ Mengoptimasi backend Laravel..."
+          composer install --no-dev --optimize-autoloader
+          php artisan migrate --force
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+          
+          echo "🎉 Deployment folder be & fe selesai dengan aman!"
